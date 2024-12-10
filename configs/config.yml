@@ -1,0 +1,14 @@
+Server:
+  Port: "8080"
+  Development: true
+  ReadTimeout: 15s
+  WriteTimeout: 15s
+  MaxHeaderMegabytes: 1
+
+PostgresDB:
+  Host: "localhost"
+  Port: "5432"
+  User: "postgres"
+  Password: "5432"
+  DBName: "studybuddy"
+  SSLMode: "disable"
