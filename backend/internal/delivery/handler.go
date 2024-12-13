@@ -38,6 +38,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/create", h.createUser)
+		auth.GET("/users", h.getAllUsers)
 		auth.GET("/user/:id", h.getUserByID)
 		auth.PUT("/user/:id", h.updateUserByID)
 		auth.DELETE("/user/:id", h.deleteUserByID)
@@ -120,6 +121,28 @@ func (h *Handler) getUserByID(c *gin.Context) {
 		"user": user,
 	})
 }
+func (h *Handler) getAllUsers(c *gin.Context) {
+    var users []dto.User 
+
+    if err := h.db.Find(&users).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{
+            "error": "Failed to retrieve users",
+        })
+        return
+    }
+
+    if len(users) == 0 {
+        c.JSON(http.StatusNotFound, gin.H{
+            "error": "No users found",
+        })
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "users": users,
+    })
+}
+
 
 func (h *Handler) updateUserByID(c *gin.Context) {
 	id := c.Param("id")
