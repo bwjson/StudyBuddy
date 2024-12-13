@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
+	"github.com/gin-contrib/cors"
 )
 
 // TODO: Реализовать структуру хэндлера и конструктор с пробросами по слоям
@@ -18,6 +19,15 @@ func NewHandler(db *gorm.DB) *Handler {
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+
+	router.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000", "http://example.com"}, // Укажите разрешённые источники
+        AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+    }))
+
 
 	example := router.Group("/example")
 	{
@@ -69,7 +79,7 @@ func (h *Handler) createUser(c *gin.Context) {
 	// TODO: Тут нужно использовать модельки
 	var input dto.User
 
-	if err := c.Bind(&input); err != nil {
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid JSON message",
 		})

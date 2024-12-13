@@ -27,7 +27,7 @@ func main() {
 	//}
 
 	// TODO: Заменить хардкод на конфиг
-	dsn := "host=localhost user=postgres password=5432 dbname=studybuddy port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=12345 dbname=studybuddy port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect to the GORM: %v", err)
