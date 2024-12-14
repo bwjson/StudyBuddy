@@ -6,7 +6,7 @@ type JsonInput struct {
 
 type User struct {
 	ID           uint   `gorm:"primaryKey" json:"id"`
-	Name         string `gorm:"size:255;not null" json:"name"`
-	Username     string `gorm:"size:255;unique;not null" json:"username"`
-	PasswordHash string `gorm:"size:255;not null" json:"passwordhash"`
+	Name         string `gorm:"size:255;not null" json:"name" binding:"required"`
+	Username     string `gorm:"size:255;unique;not null" json:"username" binding:"required"`
+	PasswordHash string `gorm:"size:255;not null" json:"password_hash" binding:"required"`
 }
