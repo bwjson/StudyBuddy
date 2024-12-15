@@ -12,3 +12,9 @@ PostgresDB:
   Password: "5432"
   DBName: "studybuddy"
   SSLMode: "disable"
+
+SMTPServer:
+  Host: "smtp.gmail.com"
+  Port: 587
+  From: "khanapin65@gmail.com"
+  Password: "bequ vobt sfra lzfd"

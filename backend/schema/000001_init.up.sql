@@ -1,20 +1,21 @@
 CREATE TABLE users (
-   id serial PRIMARY KEY,
-   name varchar(255) NOT NULL,
-   username varchar(255) NOT NULL UNIQUE,
-   password_hash varchar(255) NOT NULL
+    id serial PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    username varchar(255) NOT NULL UNIQUE,
+    password_hash varchar(255) NOT NULL
 );
 
-CREATE TABLE tag_list (
-   id serial PRIMARY KEY,
-   user_id integer NOT NULL UNIQUE,
-   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+CREATE TABLE tags (
+    id serial PRIMARY KEY,
+    title varchar(255) NOT NULL UNIQUE,
+    description varchar(255)
 );
 
-CREATE TABLE tag (
-  id serial PRIMARY KEY,
-  tag_list_id integer NOT NULL,
-  title varchar(255) NOT NULL,
-  description varchar(255),
-  FOREIGN KEY (tag_list_id) REFERENCES tag_list (id) ON DELETE CASCADE
+CREATE TABLE user_tags (
+    id serial PRIMARY KEY,
+    user_id integer NOT NULL,
+    tag_id integer NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE,
+    UNIQUE (user_id, tag_id)
 );

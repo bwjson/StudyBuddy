@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/bwjson/StudyBuddy/configs"
 	"github.com/bwjson/StudyBuddy/internal/delivery"
+	"github.com/bwjson/StudyBuddy/pkg/smtp"
 	"github.com/bwjson/StudyBuddy/server"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -57,7 +58,13 @@ func main() {
 		log.Fatalf("failed to connect to the GORM: %v", err)
 	}
 
-	handler := delivery.NewHandler(db, log)
+	smtp := smtp.NewSMTPServer(
+		cfg.SMTPServer.Host,
+		cfg.SMTPServer.Port,
+		cfg.SMTPServer.From,
+		cfg.SMTPServer.Password)
+
+	handler := delivery.NewHandler(db, log, smtp)
 
 	srv := server.NewServer(cfg, handler.InitRoutes())
 	go func() {
