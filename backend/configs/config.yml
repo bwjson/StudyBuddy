@@ -1,20 +1,20 @@
 Server:
-  Port: "8080"
+  Port: '8080'
   Development: true
   ReadTimeout: 15s
   WriteTimeout: 15s
   MaxHeaderMegabytes: 1
 
 PostgresDB:
-  Host: "localhost"
-  Port: "5432"
-  User: "postgres"
-  Password: "5432"
-  DBName: "studybuddy"
-  SSLMode: "disable"
+  Host: 'localhost'
+  Port: '5432'
+  User: 'postgres'
+  Password: '12345'
+  DBName: 'studybuddy'
+  SSLMode: 'disable'
 
 SMTPServer:
-  Host: "smtp.gmail.com"
+  Host: 'smtp.gmail.com'
   Port: 587
-  From: "khanapin65@gmail.com"
-  Password: "bequ vobt sfra lzfd"
+  From: 'khanapin65@gmail.com'
+  Password: 'bequ vobt sfra lzfd'

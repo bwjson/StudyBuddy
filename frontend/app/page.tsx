@@ -11,49 +11,54 @@ export default function Home() {
   const [messageUpdate, setMessageUpdate] = useState('')
   const [users, setUsers] = useState<any>([])
   const [idForUpdate, setIdForUpdate] = useState(0)
-
   const [id, setId] = useState(0)
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const res: any = await axios.get('http://localhost:8080/auth/user/24')
-  //     setData(res.data)
-  //   }
-  //   getData()
-  // }, [])
 
   const handleCreateUser = async () => {
-    const res = await axios.post('http://localhost:8080/auth/create', {
+    const res = await axios.post('http://localhost:8080/user/', {
       name,
       username: userName,
-      passwordhash: password,
+      password_hash: password,
     })
-    setMessageCreate('User succesfully created')
+    setMessageCreate(res.data.message)
   }
 
   const handleGetUser = async (id: number) => {
-    const res = await axios.get(`http://localhost:8080/auth/user/${id}`)
+    const res = await axios.get(`http://localhost:8080/user/${id}/`)
     setUser(res.data)
   }
 
   const handleDeleteUser = async (id: number) => {
-    await axios.delete(`http://localhost:8080/auth/user/${id}`)
+    await axios.delete(`http://localhost:8080/user/${id}/`)
   }
 
   const handleUpdateUser = async (id: number) => {
-    console.log(id)
-    const res = await axios.put(`http://localhost:8080/auth/user/${id}`, {
+    const res = await axios.put(`http://localhost:8080/user/${id}/`, {
       name,
       username: userName,
-      passwordhash: password,
+      password_hash: password,
     })
 
     setMessageUpdate(res.data.message)
   }
 
   const handleGetAllUsers = async () => {
-    const res = await axios.get('http://localhost:8080/auth/users')
+    const res = await axios.get('http://localhost:8080/user/')
     setUsers(res.data)
   }
+
+  useEffect(() => {
+    if (messageCreate) {
+      const timer = setTimeout(() => setMessageCreate(''), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [messageCreate])
+
+  useEffect(() => {
+    if (messageUpdate) {
+      const timer = setTimeout(() => setMessageUpdate(''), 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [messageUpdate])
 
   return (
     <div className='flex flex-column justify-content-center align-items-center gap-10'>
@@ -136,11 +141,12 @@ export default function Home() {
         </button>
         {users !== null && (
           <div className=''>
-            {users.users?.map((user: any) => (
+            {users.data?.map((user: any) => (
               <div>
+                <h1>{user.id}</h1>
                 <h1>{user.name}</h1>
                 <h1>{user.username}</h1>
-                <h1>{user.passwordhash}</h1>
+                <h1>{user.password_hash}</h1>
                 <hr className='bg-white' />
               </div>
             ))}
@@ -166,9 +172,10 @@ export default function Home() {
         </button>
         {user && (
           <div className='text-white'>
-            <h1>{user.user.name}</h1>
-            <h1>{user.user.username}</h1>
-            <h1>{user.user.passwordhash}</h1>
+            <h1>{user.data.id}</h1>
+            <h1>{user.data.name}</h1>
+            <h1>{user.data.username}</h1>
+            <h1>{user.data.password_hash}</h1>
           </div>
         )}
       </div>

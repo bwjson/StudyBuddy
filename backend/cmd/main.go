@@ -24,7 +24,7 @@ func main() {
 	log := logrus.New()
 	log.SetLevel(logrus.InfoLevel)
 
-	file, err := os.OpenFile("D:\\khan\\goProjects\\StudyBuddy\\backend\\logs\\server.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	file, err := os.OpenFile("D:\\Users\\user\\Desktop\\go\\backend\\server.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("Initialiazing log files failed: %v", err)
 	}

@@ -107,7 +107,7 @@ func (h *Handler) updateUserByID(c *gin.Context) {
 	var input dto.User
 	var user dto.User
 
-	if err := c.Bind(&input); err != nil {
+	if err := c.BindJSON(&input); err != nil {
 		h.log.Error("updateUserByID handler: Invalid JSON sent")
 		NewErrorResponse(c, http.StatusBadRequest, "Invalid JSON message")
 		return
