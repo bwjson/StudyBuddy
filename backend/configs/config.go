@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Server     Server
 	PostgresDB PostgresDB
+	SMTPServer SMTPServer
 }
 
 type Server struct {
@@ -26,6 +27,13 @@ type PostgresDB struct {
 	Password string
 	DBName   string
 	SSLMode  string
+}
+
+type SMTPServer struct {
+	Host     string
+	Port     string
+	From     string
+	Password string
 }
 
 func exportConfig() error {
