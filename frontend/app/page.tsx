@@ -10,6 +10,7 @@ export default function Home() {
   const [messageCreate, setMessageCreate] = useState('')
   const [messageUpdate, setMessageUpdate] = useState('')
   const [users, setUsers] = useState<any>([])
+  const [idForUpdate, setIdForUpdate] = useState(0)
 
   const [id, setId] = useState(0)
   // useEffect(() => {
@@ -39,6 +40,7 @@ export default function Home() {
   }
 
   const handleUpdateUser = async (id: number) => {
+    console.log(id)
     const res = await axios.put(`http://localhost:8080/auth/user/${id}`, {
       name,
       username: userName,
@@ -66,13 +68,13 @@ export default function Home() {
         <input
           type='text'
           placeholder='Enter User Name'
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
           onChange={(e) => setUserName(e.target.value)}
         />
         <input
           type='text'
           placeholder='Enter Password'
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
           onChange={(e) => setPassword(e.target.value)}
         />
         <button
@@ -92,28 +94,34 @@ export default function Home() {
         <input
           type='text'
           placeholder='Enter Name'
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2  text-black'
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type='text'
           placeholder='Enter User Name'
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
           onChange={(e) => setUserName(e.target.value)}
         />
         <input
           type='text'
           placeholder='Enter Password'
           onChange={(e) => setPassword(e.target.value)}
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
+        />
+        <input
+          type='text'
+          placeholder='ID'
+          onChange={(e) => setIdForUpdate(Number(e.target.value))}
+          className='w-[100%] mb-2 text-black'
         />
         <button
-          onClick={() => handleUpdateUser(id)}
+          onClick={() => handleUpdateUser(idForUpdate)}
           className='pl-5 pr-5 bg-slate-400 rounded-full'
         >
           Update
         </button>
-        {messageUpdate && <p>{'User succesfully created'}</p>}
+        {messageUpdate && <p>{messageUpdate}</p>}
       </div>
 
       <hr />
@@ -148,7 +156,7 @@ export default function Home() {
           type='text'
           placeholder='ID'
           onChange={(e) => setId(Number(e.target.value))}
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
         />
         <button
           onClick={() => handleGetUser(id)}
@@ -156,11 +164,11 @@ export default function Home() {
         >
           Get
         </button>
-        {user !== null && (
-          <div>
-            <h1>{user.name}</h1>
-            <h1>{user.username}</h1>
-            <h1>{user.passwordhash}</h1>
+        {user && (
+          <div className='text-white'>
+            <h1>{user.user.name}</h1>
+            <h1>{user.user.username}</h1>
+            <h1>{user.user.passwordhash}</h1>
           </div>
         )}
       </div>
@@ -173,7 +181,7 @@ export default function Home() {
           type='text'
           placeholder='ID'
           onChange={(e) => setId(Number(e.target.value))}
-          className='w-[100%] mb-2'
+          className='w-[100%] mb-2 text-black'
         />
         <button
           onClick={() => handleDeleteUser(id)}
