@@ -14,6 +14,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"path/filepath"
 )
 
 func main() {
@@ -23,8 +24,11 @@ func main() {
 	// Initialazing the logger
 	log := logrus.New()
 	log.SetLevel(logrus.InfoLevel)
+	w, err := os.Getwd()
 
-	file, err := os.OpenFile("D:\\Users\\user\\Desktop\\go\\backend\\server.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	logFilePath := filepath.Join(w, "logs", "server.txt")
+
+	file, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("Initialiazing log files failed: %v", err)
 	}
