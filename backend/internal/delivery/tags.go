@@ -103,7 +103,7 @@ func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
 
 	
 	
-	if sortBy != "id" && sortBy != "name" {
+	if sortBy != "id" && sortBy != "name" && sortBy != "title" && sortBy != "description" && sortBy != "username"  {
 		return "", fmt.Errorf("invalid sort_by parameter")
 	}
 
@@ -119,7 +119,7 @@ func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
 // @Produce      json
 // @Success      200  {array}   successResponse
 // @Failure      500  {object}  errorResponse
-// @Router       /user/page [get]
+// @Router       /user/{id}?page [get]
 func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 	page := c.DefaultQuery("page", "1")
 	limit := 10
@@ -139,7 +139,7 @@ func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 // @Param        id   path      int  true  "Tag ID"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
-// @Router       /user/tags/{id} [get]
+// @Router       /user/tag/{id} [get]
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
 	var tag dto.Tag

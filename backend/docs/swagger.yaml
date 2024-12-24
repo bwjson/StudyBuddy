@@ -231,6 +231,7 @@ paths:
       summary: Get pagination Order
       tags:
       - orders
+<<<<<<< HEAD
   /user/tags:
     get:
       consumes:
@@ -253,6 +254,9 @@ paths:
       tags:
       - tags
   /user/tags/{id}:
+=======
+  /user/tag/{id}:
+>>>>>>> e4cc48103c6d194887c9a25d27ebc8920cc54e4b
     get:
       consumes:
       - application/json
@@ -277,6 +281,30 @@ paths:
       summary: Get User by tagID
       tags:
       - tags
+<<<<<<< HEAD
+=======
+  /user/tags:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/delivery.successResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Get all tags
+      tags:
+      - tags
+>>>>>>> e4cc48103c6d194887c9a25d27ebc8920cc54e4b
   /user/usertags/{id}:
     get:
       consumes:

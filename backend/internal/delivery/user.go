@@ -74,7 +74,21 @@ func (h *Handler) getUserByID(c *gin.Context) {
 func (h *Handler) getAllUsers(c *gin.Context) {
 	var users []dto.User
 
-	if err := h.db.Find(&users).Error; err != nil {
+	order, err := h.getSortOrder(c)
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	
+	offset, limit, err := h.getPagination(c)
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := h.db.
+		Order(order).
+		Limit(limit).
+		Offset(offset).Find(&users).Error; err != nil {
 		h.log.Error("getAllUsers handler: Failed to get all users")
 		NewErrorResponse(c, http.StatusInternalServerError, "Failed to retrieve users")
 		return
