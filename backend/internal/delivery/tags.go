@@ -139,7 +139,7 @@ func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 // @Param        id   path      int  true  "Tag ID"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
-// @Router       /user/tags/{id} [get]
+// @Router       /user/tag/{id} [get]
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
 	var tag dto.Tag
