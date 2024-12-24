@@ -8,6 +8,15 @@ import (
 	"fmt"
 )
 
+// @Summary      Get tags by UserID
+// @Description  Get user's tag information by user ID
+// @Tags         tags
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "User ID"
+// @Success      200  {object}  successResponse
+// @Failure      404  {object}  errorResponse
+// @Router       /user/usertags/{id} [get]
 func (h *Handler) getTagsByUser(c *gin.Context) {
 	userID := c.Param("id") 
 	var tags []dto.Tag
@@ -41,7 +50,7 @@ func (h *Handler) getTagsByUser(c *gin.Context) {
 		NewErrorResponse(c, http.StatusNotFound, "User not found")
 		return
 	}
-	
+
 	if len(tags) == 0 {
 		NewErrorResponse(c, http.StatusNotFound, "No tags found for the specified user")
 		return
@@ -52,6 +61,14 @@ func (h *Handler) getTagsByUser(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved user's tags", tags)
 }
 
+// @Summary      Get all tags
+// @Description  Retrieve a list of all tags
+// @Tags         tags
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   successResponse
+// @Failure      500  {object}  errorResponse
+// @Router       /user/tags [get]
 func (h *Handler) getAllTags(c *gin.Context) {
 	var tags []dto.Tag
 
@@ -71,6 +88,15 @@ func (h *Handler) getAllTags(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all tags", tags)
 }
 
+// @Summary      Get sort Order
+// @Description  Retrieve a sort list of all orders
+// @Tags         orders
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   successResponse
+// @Failure      500  {object}  errorResponse
+// @Router       /user/sort_by&sort_order [get]
+
 func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
 	sortBy := c.DefaultQuery("sort_by", "id")
 	sortOrder := c.DefaultQuery("sort_order", "asc")
@@ -79,7 +105,14 @@ func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
 	}
 	return sortBy + " " + sortOrder, nil
 }
-
+// @Summary      Get pagination Order
+// @Description  Retrieve a pagination list of all orders
+// @Tags         orders
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   successResponse
+// @Failure      500  {object}  errorResponse
+// @Router       /user/page [get]
 func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 	page := c.DefaultQuery("page", "1")
 	limit := 10
@@ -91,7 +124,15 @@ func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 	return offset, limit, nil
 }
 
-
+// @Summary      Get User by tagID
+// @Description  Get tags information by user ID
+// @Tags         tags
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Tag ID"
+// @Success      200  {object}  successResponse
+// @Failure      404  {object}  errorResponse
+// @Router       /user/tags/{id} [get]
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
 	var tag dto.Tag
