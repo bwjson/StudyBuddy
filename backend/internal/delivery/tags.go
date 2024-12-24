@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"fmt"
 )
 
 func (h *Handler) getUserTags(c *gin.Context) {
@@ -30,29 +31,45 @@ func (h *Handler) getAllTags(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all tags", tags)
 }
 
+func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
+	sortBy := c.DefaultQuery("sort_by", "id")
+	sortOrder := c.DefaultQuery("sort_order", "asc")
+	if sortOrder != "asc" && sortOrder != "desc" {
+		return "", fmt.Errorf("invalid sort_order parameter")
+	}
+	return sortBy + " " + sortOrder, nil
+}
+
+func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
+	page := c.DefaultQuery("page", "1")
+	limit := 10
+	pageNum, err := strconv.Atoi(page)
+	if err != nil || pageNum < 1 {
+		return 0, 0, fmt.Errorf("invalid page number")
+	}
+	offset := (pageNum - 1) * limit
+	return offset, limit, nil
+}
+
+
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
 	var tag dto.Tag
-	sortBy := c.DefaultQuery("sort_by", "id")
-	sortOrder := c.DefaultQuery("sort_Order", "asc")
-	page := c.DefaultQuery("page", "1")
-	limit := 5
-
-	if sortOrder != "asc" && sortOrder != "desc" {
-		NewErrorResponse(c, http.StatusBadRequest, "Invalid sort_order parameter")
-		return
-	}
-
-	pageNum, err := strconv.Atoi(page)
-	if err != nil || pageNum < 1 {
-		NewErrorResponse(c, http.StatusBadRequest, "Invalid page number")
-		return
-	}
-	offset := (pageNum - 1) * limit
-	order := sortBy + " " + sortOrder
 
 	if err := h.db.First(&tag, tagID).Error; err != nil {
 		NewErrorResponse(c, http.StatusNotFound, "Tag not found")
+		return
+	}
+
+	order, err := h.getSortOrder(c)
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	
+	offset, limit, err := h.getPagination(c)
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -64,7 +81,7 @@ func (h *Handler) getUsersByTag(c *gin.Context) {
 		Offset(offset).
 		Find(&users).Error; err != nil {
 		NewErrorResponse(c, http.StatusNotFound, "Users not found")
-			return
+		return
 	}
 
 	if len(users) == 0 {
@@ -75,5 +92,4 @@ func (h *Handler) getUsersByTag(c *gin.Context) {
 	h.log.Info("getUsersByTag handler: Users successfully retrieved")
 
 	NewSuccessResponse(c, http.StatusOK, "Users successfully retrieved", users)
-	
 }
