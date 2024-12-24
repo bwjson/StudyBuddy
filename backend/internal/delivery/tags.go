@@ -8,8 +8,48 @@ import (
 	"fmt"
 )
 
-func (h *Handler) getUserTags(c *gin.Context) {
+func (h *Handler) getTagsByUser(c *gin.Context) {
+	userID := c.Param("id") 
+	var tags []dto.Tag
+	var user []dto.User
+	order, err := h.getSortOrder(c)
 
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	
+	offset, limit, err := h.getPagination(c)
+
+	if err != nil {
+		NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.db.Joins("JOIN user_tags ut ON ut.tag_id = tags.id").
+		Where("ut.user_id = ?", userID).
+		Order(order).
+		Limit(limit).
+		Offset(offset).
+		Find(&tags).Error; err != nil {
+		h.log.Error("getTagsByUser handler: Failed to get user's tags, userID:", userID, "error:", err)
+		NewErrorResponse(c, http.StatusInternalServerError, "Failed to retrieve user's tags")
+		return
+	}
+
+	if err := h.db.First(&user, userID).Error; err != nil {
+		NewErrorResponse(c, http.StatusNotFound, "User not found")
+		return
+	}
+	
+	if len(tags) == 0 {
+		NewErrorResponse(c, http.StatusNotFound, "No tags found for the specified user")
+		return
+	}
+
+	h.log.Info("getTagsByUser handler: Successfully retrieved tags for userID:", userID)
+
+	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved user's tags", tags)
 }
 
 func (h *Handler) getAllTags(c *gin.Context) {
@@ -26,7 +66,7 @@ func (h *Handler) getAllTags(c *gin.Context) {
 		return
 	}
 
-	h.log.Info("getAllTags handler: Successfully retrieved all tafs")
+	h.log.Info("getAllTags handler: Successfully retrieved all tags")
 
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all tags", tags)
 }

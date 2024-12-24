@@ -65,6 +65,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user.POST("/email", h.sendEmail)
 		user.GET("/tag/:id", h.getUsersByTag)
 		user.GET("/tags", h.getAllTags)
+		user.GET("/usertags/:id", h.getTagsByUser)
 	}
 
 	return router
