@@ -210,4 +210,96 @@ paths:
       summary: Send an email
       tags:
       - email
+  /user/page:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a pagination list of all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/delivery.successResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Get pagination Order
+      tags:
+      - orders
+  /user/tags:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/delivery.successResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Get all tags
+      tags:
+      - tags
+  /user/tags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get tags information by user ID
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Get User by tagID
+      tags:
+      - tags
+  /user/usertags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user's tag information by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Get tags by UserID
+      tags:
+      - tags
 swagger: "2.0"

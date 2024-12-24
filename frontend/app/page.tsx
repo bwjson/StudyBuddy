@@ -1,5 +1,6 @@
 'use client'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [users, setUsers] = useState<any>([])
   const [idForUpdate, setIdForUpdate] = useState(0)
   const [id, setId] = useState(0)
+  const navigation = useRouter()
 
   const handleCreateUser = async () => {
     const res = await axios.post('http://localhost:8080/user/', {
@@ -61,142 +63,161 @@ export default function Home() {
   }, [messageUpdate])
 
   return (
-    <div className='flex flex-column justify-content-center align-items-center gap-10'>
-      <div>
-        <h1>Create user</h1>
-        <input
-          type='text'
-          placeholder='Enter Name'
-          className='w-[100%] mb-2 text-black'
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type='text'
-          placeholder='Enter User Name'
-          className='w-[100%] mb-2 text-black'
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        <input
-          type='text'
-          placeholder='Enter Password'
-          className='w-[100%] mb-2 text-black'
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <>
+      <div className='flex justify-center items-center mt-9 mb-9'>
         <button
-          onClick={handleCreateUser}
-          className='pl-5 pr-5 bg-slate-400 rounded-full'
+          onClick={() => navigation.push('/email')}
+          className=' pl-5 pr-5 bg-slate-400 rounded-full'
         >
-          Create
-        </button>
-        {messageCreate && <p>{'User succesfully created'}</p>}
-      </div>
-
-      <hr />
-
-      <div>
-        <h1>Update user</h1>
-
-        <input
-          type='text'
-          placeholder='Enter Name'
-          className='w-[100%] mb-2  text-black'
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type='text'
-          placeholder='Enter User Name'
-          className='w-[100%] mb-2 text-black'
-          onChange={(e) => setUserName(e.target.value)}
-        />
-        <input
-          type='text'
-          placeholder='Enter Password'
-          onChange={(e) => setPassword(e.target.value)}
-          className='w-[100%] mb-2 text-black'
-        />
-        <input
-          type='text'
-          placeholder='ID'
-          onChange={(e) => setIdForUpdate(Number(e.target.value))}
-          className='w-[100%] mb-2 text-black'
-        />
-        <button
-          onClick={() => handleUpdateUser(idForUpdate)}
-          className='pl-5 pr-5 bg-slate-400 rounded-full'
-        >
-          Update
-        </button>
-        {messageUpdate && <p>{messageUpdate}</p>}
-      </div>
-
-      <hr />
-
-      <div>
-        <h1>Get all users</h1>
-        <button
-          onClick={handleGetAllUsers}
-          className='pl-5 pr-5 bg-slate-400 rounded-full'
-        >
-          Get
-        </button>
-        {users !== null && (
-          <div className=''>
-            {users.data?.map((user: any) => (
-              <div>
-                <h1>{user.id}</h1>
-                <h1>{user.name}</h1>
-                <h1>{user.username}</h1>
-                <h1>{user.password_hash}</h1>
-                <hr className='bg-white' />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <hr />
-
-      <div>
-        <h1>Get user by id</h1>
-        <input
-          type='text'
-          placeholder='ID'
-          onChange={(e) => setId(Number(e.target.value))}
-          className='w-[100%] mb-2 text-black'
-        />
-        <button
-          onClick={() => handleGetUser(id)}
-          className='pl-5 pr-5 bg-slate-400 rounded-full'
-        >
-          Get
-        </button>
-        {user && (
-          <div className='text-white'>
-            <h1>{user.data.id}</h1>
-            <h1>{user.data.name}</h1>
-            <h1>{user.data.username}</h1>
-            <h1>{user.data.password_hash}</h1>
-          </div>
-        )}
-      </div>
-
-      <hr />
-
-      <div>
-        <h1>Delete user</h1>
-        <input
-          type='text'
-          placeholder='ID'
-          onChange={(e) => setId(Number(e.target.value))}
-          className='w-[100%] mb-2 text-black'
-        />
-        <button
-          onClick={() => handleDeleteUser(id)}
-          className='pl-5 pr-5 bg-slate-400 rounded-full'
-        >
-          Delete
+          Email page
         </button>
       </div>
-    </div>
+
+      <div className='flex justify-center items-center mt-9 mb-9'>
+        <button
+          onClick={() => navigation.push('/users')}
+          className=' pl-5 pr-5 bg-slate-400 rounded-full'
+        >
+          Users Page
+        </button>
+      </div>
+      <div className='flex flex-column justify-content-center align-items-center gap-10'>
+        <div>
+          <h1>Create user</h1>
+          <input
+            type='text'
+            placeholder='Enter Name'
+            className='w-[100%] mb-2 text-black'
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type='text'
+            placeholder='Enter User Name'
+            className='w-[100%] mb-2 text-black'
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <input
+            type='text'
+            placeholder='Enter Password'
+            className='w-[100%] mb-2 text-black'
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            onClick={handleCreateUser}
+            className='pl-5 pr-5 bg-slate-400 rounded-full'
+          >
+            Create
+          </button>
+          {messageCreate && <p>{'User succesfully created'}</p>}
+        </div>
+
+        <hr />
+
+        <div>
+          <h1>Update user</h1>
+
+          <input
+            type='text'
+            placeholder='Enter Name'
+            className='w-[100%] mb-2  text-black'
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type='text'
+            placeholder='Enter User Name'
+            className='w-[100%] mb-2 text-black'
+            onChange={(e) => setUserName(e.target.value)}
+          />
+          <input
+            type='text'
+            placeholder='Enter Password'
+            onChange={(e) => setPassword(e.target.value)}
+            className='w-[100%] mb-2 text-black'
+          />
+          <input
+            type='text'
+            placeholder='ID'
+            onChange={(e) => setIdForUpdate(Number(e.target.value))}
+            className='w-[100%] mb-2 text-black'
+          />
+          <button
+            onClick={() => handleUpdateUser(idForUpdate)}
+            className='pl-5 pr-5 bg-slate-400 rounded-full'
+          >
+            Update
+          </button>
+          {messageUpdate && <p>{messageUpdate}</p>}
+        </div>
+
+        <hr />
+
+        <div>
+          <h1>Get all users</h1>
+          <button
+            onClick={handleGetAllUsers}
+            className='pl-5 pr-5 bg-slate-400 rounded-full'
+          >
+            Get
+          </button>
+          {users !== null && (
+            <div className=''>
+              {users.data?.map((user: any) => (
+                <div>
+                  <h1>{user.id}</h1>
+                  <h1>{user.name}</h1>
+                  <h1>{user.username}</h1>
+                  <h1>{user.password_hash}</h1>
+                  <hr className='bg-white' />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <hr />
+
+        <div>
+          <h1>Get user by id</h1>
+          <input
+            type='text'
+            placeholder='ID'
+            onChange={(e) => setId(Number(e.target.value))}
+            className='w-[100%] mb-2 text-black'
+          />
+          <button
+            onClick={() => handleGetUser(id)}
+            className='pl-5 pr-5 bg-slate-400 rounded-full'
+          >
+            Get
+          </button>
+          {user && (
+            <div className='text-white'>
+              <h1>{user.data.id}</h1>
+              <h1>{user.data.name}</h1>
+              <h1>{user.data.username}</h1>
+              <h1>{user.data.password_hash}</h1>
+            </div>
+          )}
+        </div>
+
+        <hr />
+
+        <div>
+          <h1>Delete user</h1>
+          <input
+            type='text'
+            placeholder='ID'
+            onChange={(e) => setId(Number(e.target.value))}
+            className='w-[100%] mb-2 text-black'
+          />
+          <button
+            onClick={() => handleDeleteUser(id)}
+            className='pl-5 pr-5 bg-slate-400 rounded-full'
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </>
   )
 }
