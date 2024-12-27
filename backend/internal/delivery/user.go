@@ -73,13 +73,14 @@ func (h *Handler) getUserByID(c *gin.Context) {
 // @Router       /user [get]
 func (h *Handler) getAllUsers(c *gin.Context) {
 	var users []dto.User
+	var totalCount int
 
 	order, err := h.getSortOrder(c)
 	if err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	
+
 	offset, limit, err := h.getPagination(c)
 	if err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, err.Error())
@@ -99,9 +100,16 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 		return
 	}
 
+	totalCount = len(users)
+
+	response := dto.UsersWithPagination{
+		User:       users,
+		TotalCount: totalCount,
+	}
+
 	h.log.Info("getAllUsers handler: Successfully retrieved all users")
 
-	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all users", users)
+	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all users", response)
 }
 
 // @Summary      Update user by ID

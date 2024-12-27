@@ -15,7 +15,6 @@ const UsersPage = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Initialize filters with default sorting options
   const [filters, setFilters] = useState<{
     sort_by: string
     sort_order: string
@@ -72,9 +71,9 @@ const UsersPage = () => {
             },
           })
         }
-        setUsers(response.data.data)
-        setTotalCount(response.data.totalCount)
-        setTotalPages(Math.ceil(response.data.totalCount / limit))
+        setUsers(response.data.data.users)
+        setTotalCount(response.data.data.totalCount)
+        setTotalPages(Math.ceil(response.data.data.totalCount / limit))
       } catch (err) {
         console.error('Ошибка при получении пользователей:', err)
       } finally {
@@ -84,6 +83,8 @@ const UsersPage = () => {
 
     fetchUsers()
   }, [selectedTag, page, limit, filters, API_BASE_URL])
+
+  console.log(totalPages)
 
   const handleTagSelect = (tag: any) => {
     setSelectedTag(tag)

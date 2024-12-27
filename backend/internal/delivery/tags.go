@@ -179,7 +179,14 @@ func (h *Handler) getUsersByTag(c *gin.Context) {
 		return
 	}
 
+	totalCount := len(users)
+
+	response := dto.UsersWithPagination{
+		User:       users,
+		TotalCount: totalCount,
+	}
+
 	h.log.Info("getUsersByTag handler: Users successfully retrieved")
 
-	NewSuccessResponse(c, http.StatusOK, "Users successfully retrieved", users)
+	NewSuccessResponse(c, http.StatusOK, "Users successfully retrieved", response)
 }
