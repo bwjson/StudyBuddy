@@ -73,7 +73,15 @@ func (h *Handler) getUserByID(c *gin.Context) {
 // @Router       /user [get]
 func (h *Handler) getAllUsers(c *gin.Context) {
 	var users []dto.User
+	var totalUsers []dto.User
 	var totalCount int
+
+	if err := h.db.Find(&totalUsers).Error; err != nil {
+		h.log.Error("getAllUsers handler: Failed to get all users")
+		return
+	}
+
+	totalCount = len(totalUsers)
 
 	order, err := h.getSortOrder(c)
 	if err != nil {
@@ -86,6 +94,7 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 		NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+
 	if err := h.db.
 		Order(order).
 		Limit(limit).
@@ -99,8 +108,6 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 		NewErrorResponse(c, http.StatusNotFound, "No users found")
 		return
 	}
-
-	totalCount = len(users)
 
 	response := dto.UsersWithPagination{
 		User:       users,

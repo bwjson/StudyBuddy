@@ -144,6 +144,7 @@ func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
 // @Router       /user/tag/{id} [get]
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
+	var totalUsers []dto.User
 	var tag dto.Tag
 
 	if err := h.db.First(&tag, tagID).Error; err != nil {
@@ -174,12 +175,18 @@ func (h *Handler) getUsersByTag(c *gin.Context) {
 		return
 	}
 
+	if err := h.db.Joins("JOIN user_tags ut ON ut.user_id = users.id").
+		Where("ut.tag_id = ?", tag.ID).
+		Find(&totalUsers).Error; err != nil {
+		return
+	}
+
+	totalCount := len(totalUsers)
+
 	if len(users) == 0 {
 		NewErrorResponse(c, http.StatusNotFound, "No users found for the specified tag")
 		return
 	}
-
-	totalCount := len(users)
 
 	response := dto.UsersWithPagination{
 		User:       users,
