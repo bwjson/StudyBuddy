@@ -1,11 +1,9 @@
 package delivery
 
 import (
-	"fmt"
 	"github.com/bwjson/StudyBuddy/internal/dto"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 // @Summary      Get tags by UserID
@@ -14,9 +12,12 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param        id   path      int  true  "User ID"
+// @Param        sort_by     query   string  false  "Sort by field (id, title, description)"
+// @Param        sort_order  query   string  false  "Sort order (asc, desc)"
+// @Param        page  query     int     false "Page number"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
-// @Router       /user/tags/{id} [get]
+// @Router       /user/usertags/{id} [get]
 func (h *Handler) getTagsByUser(c *gin.Context) {
 	userID := c.Param("id")
 	var tags []dto.Tag
@@ -88,57 +89,15 @@ func (h *Handler) getAllTags(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all tags", tags)
 }
 
-// @Summary      Get sorted orders
-// @Description  Retrieve a sorted list of all orders based on specified criteria
-// @Tags         orders
-// @Accept       json
-// @Produce      json
-// @Param        sort_by     query   string  false  "Sort by field (id, name, title, description, username)"
-// @Param        sort_order  query   string  false  "Sort order (asc, desc)"
-// @Success      200         {array} successResponse
-// @Failure      500         {object} errorResponse
-// @Router       /user [get]
-func (h *Handler) getSortOrder(c *gin.Context) (string, error) {
-	sortBy := c.DefaultQuery("sort_by", "id")
-	sortOrder := c.DefaultQuery("sort_order", "asc")
-
-	if sortBy != "id" && sortBy != "name" && sortBy != "title" && sortBy != "description" && sortBy != "username" {
-		return "", fmt.Errorf("invalid sort_by parameter")
-	}
-
-	if sortOrder != "asc" && sortOrder != "desc" {
-		return "", fmt.Errorf("invalid sort_order parameter")
-	}
-	return sortBy + " " + sortOrder, nil
-}
-
-// @Summary      Get paginated orders
-// @Description  Retrieve a paginated list of all orders for a user
-// @Tags         orders
-// @Accept       json
-// @Produce      json
-// @Param        id    path      int     true  "User ID"
-// @Param        page  query     int     false "Page number"
-// @Success      200   {array}   successResponse
-// @Failure      500   {object}  errorResponse
-// @Router       /user/{id} [get]
-func (h *Handler) getPagination(c *gin.Context) (int, int, error) {
-	page := c.DefaultQuery("page", "1")
-	limit := 10
-	pageNum, err := strconv.Atoi(page)
-	if err != nil || pageNum < 1 {
-		return 0, 0, fmt.Errorf("invalid page number")
-	}
-	offset := (pageNum - 1) * limit
-	return offset, limit, nil
-}
-
 // @Summary      Get User by tagID
 // @Description  Get tags information by user ID
 // @Tags         tags
 // @Accept       json
 // @Produce      json
 // @Param        id   path      int  true  "Tag ID"
+// @Param        sort_by     query   string  false  "Sort by field (id, name, username)"
+// @Param        sort_order  query   string  false  "Sort order (asc, desc)"
+// @Param        page  query     int     false "Page number"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
 // @Router       /user/tag/{id} [get]

@@ -12,16 +12,16 @@ import (
 	"gorm.io/gorm"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
-	"path/filepath"
 )
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	// Initialazing the logger
+	// Initializing the logger
 	log := logrus.New()
 	log.SetLevel(logrus.InfoLevel)
 	w, err := os.Getwd()
@@ -53,7 +53,8 @@ func main() {
 		cfg.PostgresDB.Password,
 		cfg.PostgresDB.Port,
 		cfg.PostgresDB.DBName,
-		cfg.PostgresDB.SSLMode)
+		cfg.PostgresDB.SSLMode,
+	)
 
 	log.Info("Starting db...")
 
@@ -62,15 +63,17 @@ func main() {
 		log.Fatalf("failed to connect to the GORM: %v", err)
 	}
 
-	smtp := smtp.NewSMTPServer(
+	smtpServ := smtp.NewSMTPServer(
 		cfg.SMTPServer.Host,
 		cfg.SMTPServer.Port,
 		cfg.SMTPServer.From,
-		cfg.SMTPServer.Password)
+		cfg.SMTPServer.Password,
+	)
 
-	handler := delivery.NewHandler(db, log, smtp)
+	handler := delivery.NewHandler(db, log, smtpServ)
 
 	srv := server.NewServer(cfg, handler.InitRoutes())
+
 	go func() {
 		log.Info("Starting server on port 8080...")
 		srv.Run()

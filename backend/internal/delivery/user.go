@@ -68,6 +68,9 @@ func (h *Handler) getUserByID(c *gin.Context) {
 // @Tags         users
 // @Accept       json
 // @Produce      json
+// @Param        sort_by     query   string  false  "Sort by field (id, name, username)"
+// @Param        sort_order  query   string  false  "Sort order (asc, desc)"
+// @Param        page  query     int     false "Page number"
 // @Success      200  {array}   successResponse
 // @Failure      500  {object}  errorResponse
 // @Router       /user [get]

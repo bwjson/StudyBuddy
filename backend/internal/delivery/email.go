@@ -10,16 +10,16 @@ import (
 	"os"
 )
 
-// @Summary      Send an email
-// @Description  Send an email to the specified address
-// @Tags         email
-// @Accept       json
-// @Produce      json
-// @Param        email  body      dto.EmailInput  true  "Email input"
-// @Success      200    {object}  successResponse
-// @Failure      400    {object}  errorResponse
-// @Failure      500    {object}  errorResponse
-// @Router       /user/email [post]
+//@Summary      Send an email
+//@Description  Send an email to the specified address
+//@Tags         email
+//@Accept       json
+//@Produce      json
+//@Param        email  body      dto.EmailInput  true  "Email input"
+//@Success      200    {object}  successResponse
+//@Failure      400    {object}  errorResponse
+//@Failure      500    {object}  errorResponse
+//@Router       /user/email [post]
 //func (h *Handler) sendEmail(c *gin.Context) {
 //	var input dto.EmailInput
 //
@@ -68,6 +68,17 @@ import (
 //	NewSuccessResponse(c, http.StatusOK, "Successfully sent email", nil)
 //}
 
+// @Summary      Send an email
+// @Description  Send an email to the specified address
+// @Tags         email
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        email  formData  dto.EmailInput  true  "Email input"
+// @Param        attachments  formData  file  false  "Attachments"
+// @Success      200    {object}  successResponse
+// @Failure      400    {object}  errorResponse
+// @Failure      500    {object}  errorResponse
+// @Router       /user/email [post]
 func (h *Handler) sendEmail(c *gin.Context) {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Error loading .env file: %v", err)

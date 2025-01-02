@@ -28,6 +28,26 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sort by field (id, name, username)",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order (asc, desc)",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -95,7 +115,7 @@ const docTemplate = `{
             "post": {
                 "description": "Send an email to the specified address",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -106,13 +126,28 @@ const docTemplate = `{
                 "summary": "Send an email",
                 "parameters": [
                     {
-                        "description": "Email input",
+                        "type": "string",
                         "name": "email",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.EmailInput"
-                        }
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "message",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "subject",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Attachments",
+                        "name": "attachments",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -157,6 +192,24 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field (id, name, username)",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order (asc, desc)",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -207,7 +260,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/tags/{id}": {
+        "/user/usertags/{id}": {
             "get": {
                 "description": "Get user's tag information by user ID",
                 "consumes": [
@@ -227,6 +280,24 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field (id, title, description)",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort order (asc, desc)",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -397,25 +468,6 @@ const docTemplate = `{
             "properties": {
                 "data": {},
                 "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "dto.EmailInput": {
-            "type": "object",
-            "required": [
-                "email",
-                "message",
-                "subject"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "subject": {
                     "type": "string"
                 }
             }

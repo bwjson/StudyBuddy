@@ -10,19 +10,6 @@ definitions:
       message:
         type: string
     type: object
-  dto.EmailInput:
-    properties:
-      email:
-        type: string
-      message:
-        type: string
-      subject:
-        type: string
-    required:
-    - email
-    - message
-    - subject
-    type: object
   dto.User:
     properties:
       name:
@@ -44,6 +31,19 @@ paths:
       consumes:
       - application/json
       description: Retrieve a list of all users
+      parameters:
+      - description: Sort by field (id, name, username)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
       produces:
       - application/json
       responses:
@@ -183,15 +183,25 @@ paths:
   /user/email:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Send an email to the specified address
       parameters:
-      - description: Email input
-        in: body
+      - in: formData
         name: email
         required: true
-        schema:
-          $ref: '#/definitions/dto.EmailInput'
+        type: string
+      - in: formData
+        name: message
+        required: true
+        type: string
+      - in: formData
+        name: subject
+        required: true
+        type: string
+      - description: Attachments
+        in: formData
+        name: attachments
+        type: file
       produces:
       - application/json
       responses:
@@ -220,6 +230,18 @@ paths:
         in: path
         name: id
         required: true
+        type: integer
+      - description: Sort by field (id, name, username)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
         type: integer
       produces:
       - application/json
@@ -256,7 +278,7 @@ paths:
       summary: Get all tags
       tags:
       - tags
-  /user/tags/{id}:
+  /user/usertags/{id}:
     get:
       consumes:
       - application/json
@@ -266,6 +288,18 @@ paths:
         in: path
         name: id
         required: true
+        type: integer
+      - description: Sort by field (id, title, description)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
         type: integer
       produces:
       - application/json
