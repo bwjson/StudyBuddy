@@ -15,6 +15,14 @@ const UsersPage = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
+  const [filters, setFilters] = useState<{
+    sort_by: string
+    sort_order: string
+  }>({
+    sort_by: 'name', // Default sort by 'name'
+    sort_order: 'asc', // Default sort order 'ascending'
+  })
+
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080'
 
@@ -26,6 +34,7 @@ const UsersPage = () => {
         setAllTags(res.data.data)
       } catch (err) {
         console.error('Ошибка при получении тегов:', err)
+        setError('Не удалось загрузить теги.')
       } finally {
         setLoading(false)
       }
@@ -47,20 +56,24 @@ const UsersPage = () => {
               params: {
                 limit,
                 page,
+                ...(filters.sort_by && { sort_by: filters.sort_by }),
+                ...(filters.sort_order && { sort_order: filters.sort_order }),
               },
             }
           )
         } else {
           response = await axios.get(`${API_BASE_URL}/user/`, {
             params: {
+              ...(filters.sort_by && { sort_by: filters.sort_by }),
+              ...(filters.sort_order && { sort_order: filters.sort_order }),
               limit,
               page,
             },
           })
         }
-        setUsers(response.data.data)
-        setTotalCount(response.data.totalCount)
-        setTotalPages(Math.ceil(response.data.totalCount / limit))
+        setUsers(response.data.data.users)
+        setTotalCount(response.data.data.totalCount)
+        setTotalPages(Math.ceil(response.data.data.totalCount / limit))
       } catch (err) {
         console.error('Ошибка при получении пользователей:', err)
       } finally {
@@ -69,7 +82,9 @@ const UsersPage = () => {
     }
 
     fetchUsers()
-  }, [selectedTag, page, limit, API_BASE_URL])
+  }, [selectedTag, page, limit, filters, API_BASE_URL])
+
+  console.log(totalPages)
 
   const handleTagSelect = (tag: any) => {
     setSelectedTag(tag)
@@ -78,6 +93,15 @@ const UsersPage = () => {
 
   const handleResetFilter = () => {
     setSelectedTag(null)
+    setPage(1)
+  }
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
     setPage(1)
   }
 
@@ -127,6 +151,39 @@ const UsersPage = () => {
           )}
         </div>
 
+        <div className='mt-6 flex flex-wrap gap-4 justify-center items-center'>
+          <div className='flex items-center'>
+            <label htmlFor='sort-by' className='mr-2 font-medium'>
+              Сортировать по:
+            </label>
+            <select
+              id='sort-by'
+              name='sort_by'
+              className='border-black border-2 p-2 rounded-2xl cursor-pointer bg-white text-black'
+              value={filters.sort_by}
+              onChange={handleSortChange}
+            >
+              <option value='name'>Имя</option>
+              <option value='email'>Email</option>
+            </select>
+          </div>
+          <div className='flex items-center'>
+            <label htmlFor='sort-order' className='mr-2 font-medium'>
+              Порядок:
+            </label>
+            <select
+              id='sort-order'
+              name='sort_order'
+              className='border-black border-2 p-2 rounded-2xl cursor-pointer bg-white text-black'
+              value={filters.sort_order}
+              onChange={handleSortChange}
+            >
+              <option value='asc'>Возрастание</option>
+              <option value='desc'>Убывание</option>
+            </select>
+          </div>
+        </div>
+
         <div className='mt-6 flex justify-end items-center'>
           <label htmlFor='limit-select' className='mr-2 font-medium'>
             Показать:
@@ -172,7 +229,9 @@ const UsersPage = () => {
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1}
             className={`px-4 py-2 border rounded ${
-              page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-black'
+              page === 1
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-black text-black hover:text-white'
             }`}
           >
             Назад
@@ -198,7 +257,7 @@ const UsersPage = () => {
             className={`px-4 py-2 rounded border ${
               page === totalPages || totalPages === 0
                 ? 'opacity-50 cursor-not-allowed'
-                : 'hover:bg-black'
+                : 'hover:bg-black text-black hover:text-white'
             }`}
           >
             Вперед
