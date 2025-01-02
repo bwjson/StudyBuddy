@@ -62,5 +62,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user.GET("/usertags/:id", h.getTagsByUser)
 	}
 
+	auth := router.Group("/auth")
+	{
+		auth.POST("/sign-up", h.signUp)
+		auth.POST("/sign-in", h.signIn)
+		auth.GET("/:token", h.verifyEmail)
+	}
+
 	return router
 }

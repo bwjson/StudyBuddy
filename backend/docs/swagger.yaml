@@ -10,8 +10,20 @@ definitions:
       message:
         type: string
     type: object
+  dto.SignInInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   dto.User:
     properties:
+      email:
+        type: string
       name:
         type: string
       password_hash:
@@ -19,6 +31,7 @@ definitions:
       username:
         type: string
     required:
+    - email
     - name
     - password_hash
     - username
@@ -26,6 +39,66 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Sign in
+      parameters:
+      - description: Sign up data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Sign in
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Sign up using email verification
+      parameters:
+      - description: Sign up data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      summary: Sign up
+      tags:
+      - auth
   /user:
     get:
       consumes:
