@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// @Security ApiKeyAuth
 // @Summary      Get tags by UserID
 // @Description  Get user's tag information by user ID
 // @Tags         tags
@@ -17,7 +18,7 @@ import (
 // @Param        page  query     int     false "Page number"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
-// @Router       /user/usertags/{id} [get]
+// @Router       /tags/usertags/{id} [get]
 func (h *Handler) getTagsByUser(c *gin.Context) {
 	userID := c.Param("id")
 	var tags []dto.Tag
@@ -62,6 +63,7 @@ func (h *Handler) getTagsByUser(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved user's tags", tags)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Get all tags
 // @Description  Retrieve a list of all tags
 // @Tags         tags
@@ -69,7 +71,7 @@ func (h *Handler) getTagsByUser(c *gin.Context) {
 // @Produce      json
 // @Success      200  {array}   successResponse
 // @Failure      500  {object}  errorResponse
-// @Router       /user/tags [get]
+// @Router       /tags [get]
 func (h *Handler) getAllTags(c *gin.Context) {
 	var tags []dto.Tag
 
@@ -89,6 +91,7 @@ func (h *Handler) getAllTags(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all tags", tags)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Get User by tagID
 // @Description  Get tags information by user ID
 // @Tags         tags
@@ -100,7 +103,7 @@ func (h *Handler) getAllTags(c *gin.Context) {
 // @Param        page  query     int     false "Page number"
 // @Success      200  {object}  successResponse
 // @Failure      404  {object}  errorResponse
-// @Router       /user/tag/{id} [get]
+// @Router       /tags/{id} [get]
 func (h *Handler) getUsersByTag(c *gin.Context) {
 	tagID := c.Param("id")
 	var totalUsers []dto.User

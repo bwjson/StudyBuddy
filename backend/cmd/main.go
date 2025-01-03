@@ -17,6 +17,15 @@ import (
 	"time"
 )
 
+// @title           StudyBuddy API
+// @version         1.0
+// @description     This is a sample server api.
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @host      localhost:8080
+
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

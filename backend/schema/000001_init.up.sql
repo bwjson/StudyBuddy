@@ -5,6 +5,7 @@ CREATE TABLE users (
     password_hash varchar(255) NOT NULL,
     email varchar(255) NOT NULL UNIQUE,
     is_active boolean DEFAULT FALSE,
+    is_admin boolean DEFAULT FALSE,
     verification_token varchar(255)
 );
 

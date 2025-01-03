@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// @Security ApiKeyAuth
 // @Summary      Create a new user
 // @Description  Create a new user in the system
 // @Tags         users
@@ -40,6 +41,7 @@ func (h *Handler) createUser(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusCreated, "User successfully created", user)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Get user by ID
 // @Description  Get user information by user ID
 // @Tags         users
@@ -63,6 +65,7 @@ func (h *Handler) getUserByID(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "User successfully retrieved", user)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Get all users
 // @Description  Retrieve a list of all users
 // @Tags         users
@@ -122,6 +125,7 @@ func (h *Handler) getAllUsers(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "Successfully retrieved all users", response)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Update user by ID
 // @Description  Update user information by user ID
 // @Tags         users
@@ -166,6 +170,7 @@ func (h *Handler) updateUserByID(c *gin.Context) {
 	NewSuccessResponse(c, http.StatusOK, "User successfully updated", user)
 }
 
+// @Security ApiKeyAuth
 // @Summary      Delete user by ID
 // @Description  Delete a user from the system by user ID
 // @Tags         users

@@ -102,7 +102,7 @@ func (h *Handler) signUp(c *gin.Context) {
 
 	url := fmt.Sprintf("http://localhost:8080/auth/%s", token)
 
-	h.smtp.SendVerifyingEmail("khanapin65@gmail.com", "Registration", url)
+	h.smtp.SendVerifyingEmail(input.Email, "Registration", url)
 
 	NewSuccessResponse(c, http.StatusOK, "Please, check your email address and click verifying link", nil)
 }

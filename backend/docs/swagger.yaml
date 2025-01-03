@@ -38,6 +38,9 @@ definitions:
     type: object
 info:
   contact: {}
+  description: This is a sample server api.
+  title: StudyBuddy API
+  version: "1.0"
 paths:
   /auth/sign-in:
     post:
@@ -99,6 +102,107 @@ paths:
       summary: Sign up
       tags:
       - auth
+  /tags:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/delivery.successResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all tags
+      tags:
+      - tags
+  /tags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get tags information by user ID
+      parameters:
+      - description: Tag ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sort by field (id, name, username)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User by tagID
+      tags:
+      - tags
+  /tags/usertags/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user's tag information by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sort by field (id, title, description)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get tags by UserID
+      tags:
+      - tags
   /user:
     get:
       consumes:
@@ -130,6 +234,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get all users
       tags:
       - users
@@ -159,6 +265,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create a new user
       tags:
       - users
@@ -188,6 +296,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete user by ID
       tags:
       - users
@@ -212,6 +322,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get user by ID
       tags:
       - users
@@ -250,6 +362,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update user by ID
       tags:
       - users
@@ -293,99 +407,9 @@ paths:
       summary: Send an email
       tags:
       - email
-  /user/tag/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get tags information by user ID
-      parameters:
-      - description: Tag ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Sort by field (id, name, username)
-        in: query
-        name: sort_by
-        type: string
-      - description: Sort order (asc, desc)
-        in: query
-        name: sort_order
-        type: string
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/delivery.successResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/delivery.errorResponse'
-      summary: Get User by tagID
-      tags:
-      - tags
-  /user/tags:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a list of all tags
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/delivery.successResponse'
-            type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/delivery.errorResponse'
-      summary: Get all tags
-      tags:
-      - tags
-  /user/usertags/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get user's tag information by user ID
-      parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: Sort by field (id, title, description)
-        in: query
-        name: sort_by
-        type: string
-      - description: Sort order (asc, desc)
-        in: query
-        name: sort_order
-        type: string
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/delivery.successResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/delivery.errorResponse'
-      summary: Get tags by UserID
-      tags:
-      - tags
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
