@@ -3,7 +3,7 @@ version: '3.8'
 services:
   backend:
     build: .
-    command: sh -c "sleep 10 && ./main"
+    command: sh -c "sleep 10 && migrate -path ./schema -database 'postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$DB_HOST:$DB_PORT/$POSTGRES_DB?sslmode=disable' up && ./main"
     ports:
       - 8080:8080
     env_file:
