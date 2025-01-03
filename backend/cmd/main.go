@@ -34,8 +34,16 @@ func main() {
 	log := logrus.New()
 	log.SetLevel(logrus.InfoLevel)
 	w, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Getting working directory failed: %v", err)
+	}
 
-	logFilePath := filepath.Join(w, "logs", "server.txt")
+	logDir := filepath.Join(w, "logs")
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		log.Fatalf("Creating logs directory failed: %v", err)
+	}
+
+	logFilePath := filepath.Join(logDir, "server.txt")
 
 	file, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
