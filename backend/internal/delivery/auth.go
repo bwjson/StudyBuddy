@@ -100,7 +100,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	url := fmt.Sprintf("http://localhost:8080/auth/%s", token)
+	url := fmt.Sprintf("https://studybuddy-l0c9.onrender.com:8080/auth/%s", token)
 
 	h.smtp.SendVerifyingEmail(input.Email, "Registration", url)
 

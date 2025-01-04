@@ -3,7 +3,7 @@ version: '3.8'
 services:
   backend:
     build: .
-    command: sh -c "sleep 5 && migrate -path ./schema -database 'postgres://db_iviy_user:89OmsjqnfM8ZQSlthfFZid08iX3MGF0z@dpg-cts369rqf0us73dofpkg-a:5432/db_iviy?sslmode=disable' up && ./main"
+    command: sh -c "sleep 5 && ./main"
     ports:
       - 8080:8080
     env_file:
