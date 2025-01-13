@@ -15,7 +15,8 @@ FROM alpine:latest AS runner
 WORKDIR /root
 
 COPY --from=builder /app/main .
-COPY .env .
 
+COPY .env .
+COPY .env.dev .
 
 CMD sh -c "sleep 5 && ./main"
