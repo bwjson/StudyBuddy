@@ -19,3 +19,9 @@ type TokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
+
+type WsMessage struct {
+	IPAddress string `json:"address"`
+	Message   string `json:"message"`
+	Time      string `json:"time"`
+}
