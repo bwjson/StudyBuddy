@@ -13,61 +13,14 @@ import (
 // @Summary      Send an email
 // @Description  Send an email to the specified address
 // @Tags         email
-// @Accept       json
+// @Accept       multipart/form-data
 // @Produce      json
-// @Param        email  body      dto.EmailInput  true  "Email input"
+// @Param        email  formData  dto.EmailInput  true  "Email input"
+// @Param        attachments  formData  file  false  "Attachments"
 // @Success      200    {object}  successResponse
 // @Failure      400    {object}  errorResponse
 // @Failure      500    {object}  errorResponse
 // @Router       /user/email [post]
-//func (h *Handler) sendEmail(c *gin.Context) {
-//	var input dto.EmailInput
-//
-//	if err := c.Request.ParseMultipartForm(10 << 20); err != nil {
-//		h.log.Error("sendEmail handler: Unable to parse form data")
-//		NewErrorResponse(c, http.StatusBadRequest, "Invalid form data")
-//		return
-//	}
-//
-//	input.Email = c.PostForm("email")
-//	input.Subject = c.PostForm("subject")
-//	input.Message = c.PostForm("message")
-//
-//	if input.Email == "" || input.Subject == "" || input.Message == "" {
-//		h.log.Error("sendEmail handler: Missing required fields")
-//		NewErrorResponse(c, http.StatusBadRequest, "Missing required fields")
-//		return
-//	}
-//
-//	form := c.Request.MultipartForm
-//	files := form.File["attachments"]
-//
-//	err := h.smtp.SendEmail(input.Email, input.Subject, input.Message)
-//	if err != nil {
-//		h.log.Error("Failed to send an email")
-//		NewErrorResponse(c, http.StatusInternalServerError, "Failed to send email")
-//		return
-//	}
-//
-//	for _, fileHeader := range files {
-//		file, err := fileHeader.Open()
-//		if err != nil {
-//			NewErrorResponse(c, http.StatusInternalServerError, "Failed to open file")
-//			return
-//		}
-//		defer file.Close()
-//
-//		dst := "./uploads/" + fileHeader.Filename
-//		if err := c.SaveUploadedFile(fileHeader, dst); err != nil {
-//			NewErrorResponse(c, http.StatusInternalServerError, "Failed to save file")
-//			return
-//		}
-//	}
-//
-//	h.log.Info("Email sent successfully")
-//	NewSuccessResponse(c, http.StatusOK, "Successfully sent email", nil)
-//}
-
 func (h *Handler) sendEmail(c *gin.Context) {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Error loading .env file: %v", err)

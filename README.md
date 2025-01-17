@@ -27,4 +27,4 @@ https://github.com/zhashkevych/go-clean-architecture
 
 # How to setup?
 
-. . . . . . . . .
+```docker compose up --build```

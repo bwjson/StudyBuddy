@@ -21,29 +21,11 @@ func NewHandler(db *gorm.DB, log *logrus.Logger, smtp *smtp.SMTPServer) *Handler
 	return &Handler{db: db, log: log, smtp: smtp}
 }
 
-// @title           StudyBuddy API
-// @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
-
-// @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
-
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host      localhost:8080
-
-// @securityDefinitions.basic  BasicAuth
-
-// @externalDocs.description  OpenAPI
-// @externalDocs.url          https://swagger.io/resources/open-api/
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, // Укажите разрешённые источники
+		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -52,10 +34,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Rate limit middleware (request per second = 1, max = 3)
 	router.Use(RateLimiter(1, 3))
 
-	user := router.Group("/user")
+	user := router.Group("/user", h.adminIdentity)
 	{
 		user.POST("/", h.createUser)
 		user.GET("/", h.getAllUsers)
@@ -63,9 +44,23 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		user.PUT("/:id", h.updateUserByID)
 		user.DELETE("/:id", h.deleteUserByID)
 		user.POST("/email", h.sendEmail)
-		user.GET("/tag/:id", h.getUsersByTag)
-		user.GET("/tags", h.getAllTags)
-		user.GET("/usertags/:id", h.getTagsByUser)
+		//user.GET("/tag/:id", h.getUsersByTag)
+		//user.GET("/tags", h.getAllTags)
+		//user.GET("/usertags/:id", h.getTagsByUser)
+	}
+
+	tags := router.Group("/tags", h.userIdentity)
+	{
+		tags.GET("/:id", h.getUsersByTag)
+		tags.GET("/", h.getAllTags)
+		tags.GET("/usertags/:id", h.getTagsByUser)
+	}
+
+	auth := router.Group("/auth")
+	{
+		auth.POST("/sign-up", h.signUp)
+		auth.POST("/sign-in", h.signIn)
+		auth.GET("/:token", h.verifyEmail)
 	}
 
 	return router

@@ -2,7 +2,11 @@ CREATE TABLE users (
     id serial PRIMARY KEY,
     name varchar(255) NOT NULL,
     username varchar(255) NOT NULL UNIQUE,
-    password_hash varchar(255) NOT NULL
+    password_hash varchar(255) NOT NULL,
+    email varchar(255) NOT NULL UNIQUE,
+    is_active boolean DEFAULT FALSE,
+    is_admin boolean DEFAULT FALSE,
+    verification_token varchar(255)
 );
 
 CREATE TABLE tags (

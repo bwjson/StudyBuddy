@@ -10,26 +10,18 @@ type EmailInput struct {
 	Message string `json:"message" binding:"required"`
 }
 
-type UsersWithPagination struct {
-	User       []User `json:"users"`
-	TotalCount int    `json:"totalCount"`
+type SignInInput struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
 }
 
-type User struct {
-	ID           uint   `gorm:"primaryKey" json:"id" swaggerignore:"true"`
-	Name         string `gorm:"size:255;not null" json:"name" binding:"required"`
-	Username     string `gorm:"size:255;unique;not null" json:"username" binding:"required"`
-	PasswordHash string `gorm:"size:255;not null" json:"password_hash" binding:"required"`
+type TokenResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
-type Tag struct {
-	ID          uint   `gorm:"primaryKey" json:"id" swaggerignore:"true"`
-	Title       string `gorm:"size:255;unique;not null" json:"title" binding:"required"`
-	Description string `gorm:"size:255;not null" json:"username" binding:"required"`
-}
-
-type UserTag struct {
-	ID     uint `gorm:"primaryKey" json:"id" swaggerignore:"true"`
-	UserID uint `gorm:"not null" json:"user_id"`
-	TagID  uint `gorm:"not null" json:"tag_id"`
+type WsMessage struct {
+	IPAddress string `json:"address"`
+	Message   string `json:"message"`
+	Time      string `json:"time"`
 }
