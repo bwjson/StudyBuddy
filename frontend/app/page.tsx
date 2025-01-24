@@ -26,20 +26,25 @@ export default function Home() {
   }
 
   const handleGetUser = async (id: number) => {
-    const res = await axios.get(`http://localhost:8080/user/${id}/`)
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/`
+    )
     setUser(res.data)
   }
 
   const handleDeleteUser = async (id: number) => {
-    await axios.delete(`http://localhost:8080/user/${id}/`)
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}/`)
   }
 
   const handleUpdateUser = async (id: number) => {
-    const res = await axios.put(`http://localhost:8080/user/${id}/`, {
-      name,
-      username: userName,
-      password_hash: password,
-    })
+    const res = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/`,
+      {
+        name,
+        username: userName,
+        password_hash: password,
+      }
+    )
 
     setMessageUpdate(res.data.message)
   }
