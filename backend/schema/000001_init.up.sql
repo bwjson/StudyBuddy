@@ -23,3 +23,4 @@ CREATE TABLE user_tags (
     FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE,
     UNIQUE (user_id, tag_id)
 );
+

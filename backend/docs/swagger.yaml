@@ -1,6 +1,39 @@
 definitions:
+  delivery.buySubscriptionRequest:
+    properties:
+      card_number:
+        type: string
+      cvv:
+        type: string
+      email:
+        type: string
+      valid_until:
+        type: string
+    required:
+    - card_number
+    - cvv
+    - email
+    - valid_until
+    type: object
+  delivery.cancelSubscriptionRequest:
+    properties:
+      card_number:
+        type: string
+      email:
+        type: string
+    required:
+    - card_number
+    - email
+    type: object
   delivery.errorResponse:
     properties:
+      message:
+        type: string
+    type: object
+  delivery.successGRPCResponse:
+    properties:
+      detail:
+        type: string
       message:
         type: string
     type: object
@@ -102,6 +135,70 @@ paths:
       summary: Sign up
       tags:
       - auth
+  /subscriptions/buy/:
+    post:
+      consumes:
+      - application/json
+      description: Subscription by PayPal
+      parameters:
+      - description: Subscription Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/delivery.buySubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successGRPCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Buy subscription
+      tags:
+      - paypal
+  /subscriptions/cancel/:
+    post:
+      consumes:
+      - application/json
+      description: Cancel subscription via PayPal
+      parameters:
+      - description: Subscription Cancellation Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/delivery.cancelSubscriptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/delivery.successGRPCResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/delivery.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Cancel subscription
+      tags:
+      - paypal
   /tags:
     get:
       consumes:

@@ -2,6 +2,7 @@ package delivery
 
 import (
 	_ "github.com/bwjson/StudyBuddy/docs"
+	"github.com/bwjson/StudyBuddy/internal/grpc"
 	"github.com/bwjson/StudyBuddy/pkg/smtp"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,13 +13,14 @@ import (
 )
 
 type Handler struct {
-	db   *gorm.DB
-	log  *logrus.Logger
-	smtp *smtp.SMTPServer
+	db     *gorm.DB
+	log    *logrus.Logger
+	smtp   *smtp.SMTPServer
+	client *grpc.Client
 }
 
-func NewHandler(db *gorm.DB, log *logrus.Logger, smtp *smtp.SMTPServer) *Handler {
-	return &Handler{db: db, log: log, smtp: smtp}
+func NewHandler(db *gorm.DB, log *logrus.Logger, smtp *smtp.SMTPServer, client *grpc.Client) *Handler {
+	return &Handler{db: db, log: log, smtp: smtp, client: client}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
@@ -61,6 +63,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-up", h.signUp)
 		auth.POST("/sign-in", h.signIn)
 		auth.GET("/:token", h.verifyEmail)
+	}
+
+	subscriptions := router.Group("/subscriptions")
+	{
+		subscriptions.POST("/buy", h.buySubscription)
+		subscriptions.POST("/cancel", h.cancelSubscription)
 	}
 
 	return router

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package paypal;
+
+option go_package = "bwjson.paypal.v1;paypalv1";
+
+service Paypal {
+  rpc BuySubscription (PaymentInfo) returns (Response);
+  rpc CancelSubscription (SubscriptionInfo) returns (Response);
+}
+
+message PaymentInfo {
+  string email = 1;
+  string card_number = 2;
+  string valid_until = 3;
+  string cvv = 4;
+}
+
+message SubscriptionInfo {
+  string email = 1;
+}
+
+message Response {
+  string response = 1;
+  string detail = 2;
+}
+

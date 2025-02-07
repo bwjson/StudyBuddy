@@ -2,27 +2,15 @@ package main
 
 import (
 	"github.com/bwjson/StudyBuddy/internal/delivery"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 //import (
-//	"context"
-//	"fmt"
-//	"github.com/bwjson/StudyBuddy/configs"
 //	"github.com/bwjson/StudyBuddy/internal/delivery"
-//	"github.com/bwjson/StudyBuddy/pkg/smtp"
-//	"github.com/bwjson/StudyBuddy/server"
-//	"github.com/sirupsen/logrus"
-//	"gorm.io/driver/postgres"
-//	"gorm.io/gorm"
-//	"os"
-//	"os/signal"
-//	"path/filepath"
-//	"syscall"
-//	"time"
+//	"log"
 //)
 
-const addr = "10.73.62.127:8080"
+const addr = "10.73.62.156:8080"
 
 // @title           StudyBuddy API
 // @version         1.0
@@ -32,10 +20,14 @@ const addr = "10.73.62.127:8080"
 // @in header
 // @name Authorization
 // @host      localhost:8080
-
 //func main() {
 //	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 //	defer cancel()
+//
+//	client, err := paypalclient.NewClient()
+//	if err != nil {
+//		log.Fatalf("failed to create gRPC client: %v", err)
+//	}
 //
 //	// Initializing the logger
 //	log := logrus.New()
@@ -94,7 +86,7 @@ const addr = "10.73.62.127:8080"
 //		cfg.SMTPServer.Password,
 //	)
 //
-//	handler := delivery.NewHandler(db, log, smtpServ)
+//	handler := delivery.NewHandler(db, log, smtpServ, client)
 //
 //	srv := server.NewServer(cfg, handler.InitRoutes())
 //
@@ -117,11 +109,11 @@ const addr = "10.73.62.127:8080"
 //	log.Info("Server stopped successfully")
 //}
 
+// FOR WEBSOCKETS CHAT JUST go run backend/cmd/main.go
 func main() {
 	wsSrv := delivery.NewWsServer(addr)
-	log.Info("Started ws server")
+	logrus.Info("Started ws server")
 	if err := wsSrv.Start(); err != nil {
-		log.Errorf("Error with ws server: %v", err)
+		logrus.Errorf("Error with ws server: %v", err)
 	}
-	log.Error(wsSrv.Stop())
 }
