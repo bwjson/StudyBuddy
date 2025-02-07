@@ -28,3 +28,7 @@ https://github.com/zhashkevych/go-clean-architecture
 # How to setup?
 
 ```docker compose up --build```
+
+# Deploy adresses:
+1.Backend: https://studybuddy-l0c9.onrender.com
+2. Frontend: https://study-buddy-liart.vercel.app/
